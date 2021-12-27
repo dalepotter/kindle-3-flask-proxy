@@ -23,7 +23,7 @@ $ export FLASK_ENV=development
 $ pip install -r requirements_dev.txt
 ```
 
-## Tests
+### Tests
 
 Can be run using pytest:
 
