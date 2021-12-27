@@ -14,3 +14,19 @@ $ flask run
 ```
 
 Requests can then be make to `http://localhost:5000/p/<URL HERE WITHOUT PROTOCOL>` - example `http://localhost:5000/p/www.google.com`
+
+
+## Development
+
+```
+$ export FLASK_ENV=development
+$ pip install -r requirements_dev.txt
+```
+
+## Tests
+
+Can be run using pytest:
+
+```
+pytest
+```
