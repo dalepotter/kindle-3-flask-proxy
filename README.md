@@ -6,8 +6,8 @@ Basic Flask proxy to support accessing modern websites using the Amazon Kindle 3
 ## Installation
 
 ```
-$ python3 -m venv pyenv
-$ source pyenv/bin/activate
+$ python3 -m venv venv
+$ source venv/bin/activate
 $ pip install -r requirements.txt
 $ export FLASK_APP=basic_flask_proxy.app
 $ flask run
