@@ -13,7 +13,7 @@ $ export FLASK_APP=basic_flask_proxy.app
 $ flask run
 ```
 
-Requests can then be make to `http://localhost:5000/p/<URL HERE WITHOUT PROTOCOL>` - example `http://localhost:5000/p/www.google.com`
+Requests can then be make to `http://localhost:5000/p?url=<URL HERE WITHOUT PROTOCOL>` - example `http://localhost:5000/p?url=www.google.com`
 
 
 ## Development
