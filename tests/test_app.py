@@ -1,5 +1,23 @@
+import pytest
 import responses
-from basic_flask_proxy.app import app
+from basic_flask_proxy.app import app, convert_links
+
+
+@pytest.mark.parametrize("html_element_attribute", ["href", "src"])
+@pytest.mark.parametrize("quote_char", ["\"", "'"])
+@pytest.mark.parametrize("input_url, expected_output", [
+    ("http://www.example.com/path/to/file.jpg", "http://www.proxy.com/p?url=www.example.com/path/to/file.jpg"),
+    ("https://www.example.com/path/to/file.jpg", "http://www.proxy.com/p?url=www.example.com/path/to/file.jpg"),
+    ("//www.example.com/path/to/file.jpg", "http://www.proxy.com/p?url=www.example.com/path/to/file.jpg"),
+    ("/path/to/file.jpg", "http://www.proxy.com/p?url=www.example.com/path/to/file.jpg"),
+    pytest.param("../abc.py", "http://www.proxy.com/p?url=www.example.com/abc.py", marks=pytest.mark.xfail),  # Relative links not yet supported
+])
+def test_convert_links(html_element_attribute, quote_char, input_url, expected_output):
+    input_string = f'{html_element_attribute}={quote_char}{input_url}{quote_char}'
+
+    result = convert_links(input_string, domain_called="www.example.com", proxy_prefix="http://www.proxy.com/p?url=")
+
+    assert result == f'{html_element_attribute}="{expected_output}"'
 
 
 def test_p_calls_url():
@@ -12,7 +30,7 @@ def test_p_calls_url():
     )
 
     with app.test_client() as client:
-        result = client.get("/p/www.google.com")
+        result = client.get("/p?url=www.google.com")
 
     assert result.data.decode() == "Mock Google homepage"
     assert result.status_code == 200
