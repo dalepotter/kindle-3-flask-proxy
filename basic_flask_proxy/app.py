@@ -24,7 +24,7 @@ def convert_links(html, domain_called, proxy_prefix):
 
 
 @app.route('/p', methods=['GET', 'POST', 'DELETE', 'PUT', 'PATCH'])
-def _proxy(*args, **kwargs):
+def proxy():
     """Heavily inspired by: https://stackoverflow.com/a/36601467/2761030"""
     url = f"http://{request.args['url']}"
 
