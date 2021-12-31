@@ -9,14 +9,14 @@ app = Flask(__name__.split('.')[0])
 def convert_links(html, domain_called, proxy_prefix):
     # Handle absolute imports
     output = re.sub(
-        r'([href|src]=)["\'](.*)//(.*)["\']',
+        r'([action|content|href|src]=)["\'](.*)//(.*)["\']',
         rf'\1"{proxy_prefix}\3"',
         html
     )
 
     # Handle relative imports
     output = re.sub(
-        r'([href|src]=)["\']/(.*)["\']',
+        r'([action|content|href|src]=)["\']/(.*)["\']',
         rf'\1"{proxy_prefix}{domain_called}/\2"',
         output
     )

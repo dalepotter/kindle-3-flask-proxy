@@ -3,7 +3,7 @@ import responses
 from basic_flask_proxy.app import app, convert_links
 
 
-@pytest.mark.parametrize("html_element_attribute", ["href", "src"])
+@pytest.mark.parametrize("html_element_attribute", ["action", "content", "href", "src"])
 @pytest.mark.parametrize("quote_char", ["\"", "'"])
 @pytest.mark.parametrize("input_url, expected_output", [
     ("http://www.example.com/path/to/file.jpg", "http://www.proxy.com/p?url=www.example.com/path/to/file.jpg"),
