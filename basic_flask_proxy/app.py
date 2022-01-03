@@ -1,6 +1,6 @@
 import re
 import requests
-from urllib.parse import urljoin, urlparse
+from urllib.parse import urljoin
 from flask import request, Flask, Response
 
 app = Flask(__name__.split('.')[0])
