@@ -1,6 +1,6 @@
 import re
 import requests
-from urllib.parse import urljoin, urlparse
+from urllib.parse import urljoin
 from flask import request, Flask, Response
 
 app = Flask(__name__.split('.')[0])
@@ -12,7 +12,7 @@ def convert_links(html, current_url, proxy_prefix):
 
     Input:
         html (str) -- HTML content for the page.
-        current_url (str) -- The current URL of the input HTML.
+        current_url (str) -- The current URL (without scheme) of the input HTML.
         proxy_prefix (str) -- The proxy URL that can be called to make requests and return content.
 
     Returns:
@@ -50,11 +50,12 @@ def convert_links(html, current_url, proxy_prefix):
 @app.route('/p', methods=['GET', 'POST', 'DELETE', 'PUT', 'PATCH'])
 def _proxy(*args, **kwargs):
     """Heavily inspired by: https://stackoverflow.com/a/36601467/2761030"""
-    url = f"http://{request.args['url']}"
+    url = request.args['url']
+    url_with_scheme = f"http://{url}"
 
     resp = requests.request(
         method=request.method,
-        url=url,
+        url=url_with_scheme,
         headers={key: value for (key, value) in request.headers if key != 'Host'},
         data=request.get_data(),
         cookies=request.cookies,
