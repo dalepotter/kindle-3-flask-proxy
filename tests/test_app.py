@@ -22,6 +22,15 @@ def test_convert_links(html_element_attribute, quote_char, input_url, expected_o
     assert result == f'{html_element_attribute}="{expected_output}"'
 
 
+def test_index_get():
+    """A GET request to the index page must return a 200 code and template content."""
+    with app.test_client() as client:
+        result = client.get("/")
+
+    assert result.status_code == 200
+    assert "<h1>Proxy for Kindle 3 web browser</h1>" in result.data.decode()
+
+
 def test_p_calls_url():
     """A call to the proxy route must return what the content of the specificed URL."""
     responses.add(

@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang=en>
+
+<head>
+  <meta charset=utf-8>
+  <title>Proxy for Kindle 3 web browser</title>
+</head>
+
+<body>
+  <h1>Proxy for Kindle 3 web browser</h1>
+
+  <p>Example sites you can access:</p>
+  <ul>
+    <li><a href="{{ url_for("proxy", url="en.wikipedia.org/wiki/Main_Page") }}">Wikipedia</a></li>
+    <li><a href="{{ url_for("proxy", url="bbc.co.uk/news") }}">BBC News</a></li>
+    <li><a href="{{ url_for("proxy", url="realpython.com") }}">Real Python</a></li>
+    <li><a href="{{ url_for("proxy", url="railforums.co.uk") }}">Rail UK forums</a></li>
+  </ul>
+</body>
+
+</html>

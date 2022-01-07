@@ -1,7 +1,7 @@
 import re
 import requests
 from urllib.parse import urljoin
-from flask import request, Flask, Response
+from flask import Flask, Response, render_template, request
 
 app = Flask(__name__.split('.')[0])
 
@@ -45,6 +45,11 @@ def convert_links(html, current_url, proxy_prefix):
         output
     )
     return output
+
+
+@app.route('/')
+def index():
+    return render_template("index.html")
 
 
 @app.route('/p', methods=['GET', 'POST', 'DELETE', 'PUT', 'PATCH'])
