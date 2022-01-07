@@ -1,23 +1,47 @@
 import re
 import requests
-from urllib.parse import urlparse
+from urllib.parse import urljoin
 from flask import request, Flask, Response
 
 app = Flask(__name__.split('.')[0])
 
 
-def convert_links(html, domain_called, proxy_prefix):
-    # Handle absolute imports
+def convert_links(html, current_url, proxy_prefix):
+    """Find and replace attribute references to URLs, so that they are prefixed by the proxy URL.
+    Supports action/content/href/src attributes.
+
+    Input:
+        html (str) -- HTML content for the page.
+        current_url (str) -- The current URL (without scheme) of the input HTML.
+        proxy_prefix (str) -- The proxy URL that can be called to make requests and return content.
+
+    Returns:
+        str -- HTML content with attribute URL references prefixed with the proxy URL.
+    """
+
+    # Handle absolute URLs
     output = re.sub(
-        r'([href|src]=)["\'](.*)//(.*)["\']',
-        rf'\1"{proxy_prefix}\3"',
+        r'([action|content|href|src]=)["\'](.*)//(.*)["\']',
+        rf'\1"{proxy_prefix}\3"',  # Normalises all URL encapsulation to double quotes
         html
     )
 
-    # Handle relative imports
+    # Handle relative URLs
+    def rel_url_to_proxy_replace(matchobj):
+        """Return the absolute path to the a relative URL, prefixed by the proxy URL.
+
+        Input:
+            matchobj (re.Match) -- A regex match object.
+
+        Returns:
+            str -- Referenced URL, prefixed by the proxy URL.
+        """
+        absolute_url = urljoin(f"//{current_url}", matchobj.group(2))
+        return f'{matchobj.group(1)}"{proxy_prefix}{absolute_url[2:]}"'  # Normalises all URL encapsulation to double quotes
+
     output = re.sub(
-        r'([href|src]=)["\']/(.*)["\']',
-        rf'\1"{proxy_prefix}{domain_called}/\2"',
+        r'([action|content|href|src]=)["\']([./]+.*)["\']',
+        rel_url_to_proxy_replace,
         output
     )
     return output
@@ -26,11 +50,12 @@ def convert_links(html, domain_called, proxy_prefix):
 @app.route('/p', methods=['GET', 'POST', 'DELETE', 'PUT', 'PATCH'])
 def proxy():
     """Heavily inspired by: https://stackoverflow.com/a/36601467/2761030"""
-    url = f"http://{request.args['url']}"
+    url = request.args['url']
+    url_with_scheme = f"http://{url}"
 
     resp = requests.request(
         method=request.method,
-        url=url,
+        url=url_with_scheme,
         headers={key: value for (key, value) in request.headers if key != 'Host'},
         data=request.get_data(),
         cookies=request.cookies,
@@ -44,7 +69,7 @@ def proxy():
     try:
         resp_content = convert_links(
             resp.content.decode("utf-8"),
-            domain_called=urlparse(url).netloc,
+            current_url=url,
             proxy_prefix=f"http://{request.host}/p?url=",
         )
     except UnicodeDecodeError:

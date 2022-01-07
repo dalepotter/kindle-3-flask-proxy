@@ -3,19 +3,21 @@ import responses
 from basic_flask_proxy.app import app, convert_links
 
 
-@pytest.mark.parametrize("html_element_attribute", ["href", "src"])
+@pytest.mark.parametrize("html_element_attribute", ["action", "content", "href", "src"])
 @pytest.mark.parametrize("quote_char", ["\"", "'"])
 @pytest.mark.parametrize("input_url, expected_output", [
     ("http://www.example.com/path/to/file.jpg", "http://www.proxy.com/p?url=www.example.com/path/to/file.jpg"),
     ("https://www.example.com/path/to/file.jpg", "http://www.proxy.com/p?url=www.example.com/path/to/file.jpg"),
     ("//www.example.com/path/to/file.jpg", "http://www.proxy.com/p?url=www.example.com/path/to/file.jpg"),
     ("/path/to/file.jpg", "http://www.proxy.com/p?url=www.example.com/path/to/file.jpg"),
-    pytest.param("../abc.py", "http://www.proxy.com/p?url=www.example.com/abc.py", marks=pytest.mark.xfail),  # Relative links not yet supported
+    ("../abc.py", "http://www.proxy.com/p?url=www.example.com/path/abc.py"),
+    ("./abc.py", "http://www.proxy.com/p?url=www.example.com/path/to/abc.py"),
 ])
 def test_convert_links(html_element_attribute, quote_char, input_url, expected_output):
+    current_url = "www.example.com/path/to/file.txt"
     input_string = f'{html_element_attribute}={quote_char}{input_url}{quote_char}'
 
-    result = convert_links(input_string, domain_called="www.example.com", proxy_prefix="http://www.proxy.com/p?url=")
+    result = convert_links(input_string, current_url, proxy_prefix="http://www.proxy.com/p?url=")
 
     assert result == f'{html_element_attribute}="{expected_output}"'
 
