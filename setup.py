@@ -10,6 +10,7 @@ setup(
     packages=find_packages(),
     install_requires=[
         "Flask==2.0.2",
+        "flask-wtf==1.0.0",
         "requests==2.26.0",
     ]
 )

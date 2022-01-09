@@ -31,6 +31,18 @@ def test_index_get():
     assert "<h1>Proxy for Kindle 3 web browser</h1>" in result.data.decode()
 
 
+def test_index_post_valid():
+    """A POST request to the index page must redirect to the expected proxy route."""
+    app.config['TESTING'] = True
+    app.config['WTF_CSRF_ENABLED'] = False
+
+    with app.test_client() as client:
+        result = client.post("/", data={'url': "google.com"})
+
+    assert result.status_code == 302
+    assert result.location.endswith("/p?url=google.com")
+
+
 def test_p_calls_url():
     """A call to the proxy route must return what the content of the specificed URL."""
     responses.add(

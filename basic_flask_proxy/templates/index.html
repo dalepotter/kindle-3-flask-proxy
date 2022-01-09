@@ -9,6 +9,14 @@
 <body>
   <h1>Proxy for Kindle 3 web browser</h1>
 
+  <form method="post" action="/">
+    {{ form.csrf_token }}
+    {{ form.url.label }} {{ form.url(size=20) }}
+    <input type="submit" value="Go">
+  </form>
+
+  <h2>Bookmarks</h2>
+
   <p>Example sites you can access:</p>
   <ul>
     <li><a href="{{ url_for("proxy", url="en.wikipedia.org/wiki/Main_Page") }}">Wikipedia</a></li>

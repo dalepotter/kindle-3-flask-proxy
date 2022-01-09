@@ -1,9 +1,18 @@
 import re
 import requests
+import secrets
 from urllib.parse import urljoin
-from flask import Flask, Response, render_template, request
+from flask import Flask, Response, redirect, render_template, request, url_for
+from flask_wtf import FlaskForm
+from wtforms import StringField
+from wtforms.validators import DataRequired
 
 app = Flask(__name__.split('.')[0])
+app.secret_key = secrets.token_urlsafe(16)
+
+
+class EnterUrlForm(FlaskForm):
+    url = StringField('Enter URL to visit')
 
 
 def convert_links(html, current_url, proxy_prefix):
@@ -47,9 +56,12 @@ def convert_links(html, current_url, proxy_prefix):
     return output
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template("index.html")
+    form = EnterUrlForm()
+    if form.validate_on_submit():
+        return redirect(url_for("proxy", url=form.url.data))
+    return render_template("index.html", form=form)
 
 
 @app.route('/p', methods=['GET', 'POST', 'DELETE', 'PUT', 'PATCH'])
