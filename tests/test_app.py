@@ -37,23 +37,23 @@ def test_index_post_valid():
     app.config['WTF_CSRF_ENABLED'] = False
 
     with app.test_client() as client:
-        result = client.post("/", data={'url': "google.com"})
+        result = client.post("/", data={'url': "example.com"})
 
     assert result.status_code == 302
-    assert result.location.endswith("/p?url=google.com")
+    assert result.location.endswith("/p?url=example.com")
 
 
 def test_p_calls_url():
     """A call to the proxy route must return what the content of the specificed URL."""
     responses.add(
         responses.GET,
-        "http://www.google.com",
-        body="Mock Google homepage",
+        "http://www.example.com",
+        body="Mock web page",
         status=200
     )
 
     with app.test_client() as client:
-        result = client.get("/p?url=www.google.com")
+        result = client.get("/p?url=www.example.com")
 
-    assert result.data.decode() == "Mock Google homepage"
+    assert result.data.decode() == "Mock web page"
     assert result.status_code == 200
