@@ -5,14 +5,22 @@ from urllib.parse import urljoin
 from flask import Flask, Response, redirect, render_template, request, url_for
 from flask_wtf import FlaskForm
 from wtforms import StringField
-from wtforms.validators import DataRequired
+from wtforms.validators import Regexp
 
 app = Flask(__name__.split('.')[0])
 app.secret_key = secrets.token_urlsafe(16)
 
 
 class EnterUrlForm(FlaskForm):
-    url = StringField('Enter URL to visit')
+    url = StringField(
+        'Enter URL to visit',
+        validators=[
+            Regexp(
+                regex='^[A-Za-z0-9][A-Za-z0-9.-]+(:\d+)?(/.*)?$',
+                message='Enter a valid domain (without scheme prefix) - like \'example.com\''
+            ),
+        ]
+    )
 
 
 def convert_links(html, current_url, proxy_prefix):
