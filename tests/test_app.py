@@ -4,6 +4,14 @@ from urllib.parse import quote_plus
 from basic_flask_proxy.app import app, convert_links
 
 
+@pytest.fixture()
+def mock_app():
+    """Return a mock instance of the app."""
+    app.config['TESTING'] = True
+    app.config['WTF_CSRF_ENABLED'] = False
+    return app
+
+
 @pytest.mark.parametrize("html_element_attribute", ["action", "content", "href", "src"])
 @pytest.mark.parametrize("quote_char", ["\"", "'"])
 @pytest.mark.parametrize("input_url, expected_output", [
@@ -23,9 +31,9 @@ def test_convert_links(html_element_attribute, quote_char, input_url, expected_o
     assert result == f'{html_element_attribute}="{expected_output}"'
 
 
-def test_index_get():
+def test_index_get(mock_app):
     """A GET request to the index page must return a 200 code and template content."""
-    with app.test_client() as client:
+    with mock_app.test_client() as client:
         result = client.get("/")
 
     assert result.status_code == 200
@@ -35,13 +43,11 @@ def test_index_get():
 @pytest.mark.parametrize("valid_data", [
     "example.com", "example.com/path/to/domain?url=param"
 ])
-def test_index_post_valid(valid_data):
+def test_index_post_valid(mock_app, valid_data):
     """A POST request to the index page (with VALID data) must redirect to the expected proxy route."""
-    app.config['TESTING'] = True
-    app.config['WTF_CSRF_ENABLED'] = False
     encoded_url = quote_plus(valid_data)
 
-    with app.test_client() as client:
+    with mock_app.test_client() as client:
         result = client.post("/", data={'url': valid_data})
 
     assert result.status_code == 302
@@ -51,19 +57,16 @@ def test_index_post_valid(valid_data):
 @pytest.mark.parametrize("invalid_data", [
     "", " ", "not_a_domain", "http://example.com", "https://example.com", "//example.com"
 ])
-def test_index_post_invalid(invalid_data):
+def test_index_post_invalid(mock_app, invalid_data):
     """A POST request to the index page (with INVALID data) must display an error message."""
-    app.config['TESTING'] = True
-    app.config['WTF_CSRF_ENABLED'] = False
-
-    with app.test_client() as client:
+    with mock_app.test_client() as client:
         result = client.post("/", data={'url': invalid_data})
 
     assert result.status_code == 200
     assert "Enter a valid domain (without scheme prefix) - like &#39;example.com&#39;" in result.data.decode()
 
 
-def test_p_calls_url():
+def test_p_calls_url(mock_app):
     """A call to the proxy route must return what the content of the specificed URL."""
     responses.add(
         responses.GET,
@@ -72,7 +75,7 @@ def test_p_calls_url():
         status=200
     )
 
-    with app.test_client() as client:
+    with mock_app.test_client() as client:
         result = client.get("/p?url=www.example.com")
 
     assert result.data.decode() == "Mock web page"
