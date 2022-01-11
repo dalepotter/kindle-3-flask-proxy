@@ -16,7 +16,7 @@ class EnterUrlForm(FlaskForm):
         'Enter URL to visit',
         validators=[
             Regexp(
-                regex='^[A-Za-z0-9][A-Za-z0-9.-]+(:\d+)?(/.*)?$',  # Credit https://stackoverflow.com/a/971094/2761030
+                regex=r'^[A-Za-z0-9][A-Za-z0-9.-]+(:\d+)?(/.*)?$',  # Credit https://stackoverflow.com/a/971094/2761030
                 message='Enter a valid domain (without scheme prefix) - like \'example.com\''
             ),
         ]
