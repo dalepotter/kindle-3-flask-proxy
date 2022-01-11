@@ -41,7 +41,7 @@ def test_index_get(mock_app):
 
 
 @pytest.mark.parametrize("valid_data", [
-    "example.com", "example.com/path/to/domain?url=param"
+    "example.com", "subdomain.example.com:8080/path/to/file?url=param"
 ])
 def test_index_post_valid(mock_app, valid_data):
     """A POST request to the index page (with VALID data) must redirect to the expected proxy route."""
