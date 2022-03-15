@@ -38,7 +38,7 @@ def convert_links(html, current_url, proxy_prefix):
 
     # Handle absolute URLs
     output = re.sub(
-        r'([action|content|href|src]=)["\'](.*)//(.*)["\']',
+        r'([action|content|href|src]=)["\'](.*?)//(.*?)["\']',
         rf'\1"{proxy_prefix}\3"',  # Normalises all URL encapsulation to double quotes
         html
     )
@@ -57,7 +57,7 @@ def convert_links(html, current_url, proxy_prefix):
         return f'{matchobj.group(1)}"{proxy_prefix}{absolute_url[2:]}"'  # Normalises all URL encapsulation to double quotes
 
     output = re.sub(
-        r'([action|content|href|src]=)["\']([./]+.*)["\']',
+        r'([action|content|href|src]=)["\']([./]+.*?)["\']',
         rel_url_to_proxy_replace,
         output
     )
