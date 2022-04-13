@@ -38,5 +38,5 @@ $ pip install -r requirements_dev.txt
 Can be run using pytest:
 
 ```
-pytest
+$ pytest
 ```
