@@ -1,4 +1,4 @@
 -r requirements.txt
 pip-tools==6.6.0
-pytest==6.2.5
+pytest==7.1.1
 pytest-responses==0.5.0

@@ -9,8 +9,8 @@ setup(
     description='Basic Flask proxy to support accessing modern websites using the Amazon Kindle 3 built-in web browser.',
     packages=find_packages(),
     install_requires=[
-        "Flask==2.0.2",
-        "flask-wtf==1.0.0",
-        "requests==2.26.0",
+        "Flask==2.1.1",
+        "flask-wtf==1.0.1",
+        "requests==2.27.1",
     ]
 )
