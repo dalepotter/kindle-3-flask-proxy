@@ -6,7 +6,7 @@
 #
 -e file:.
     # via -r requirements.in
-certifi==2021.10.8
+certifi==2022.12.7
     # via requests
 charset-normalizer==2.0.12
     # via requests
@@ -14,16 +14,14 @@ click==8.1.2
     # via flask
 flask==2.1.1
     # via
-    #   basic-flask-proxy
     #   flask-wtf
+    #   sanitized-package
 flask-wtf==1.0.1
-    # via basic-flask-proxy
+    # via sanitized-package
 gunicorn==20.1.0
     # via -r requirements.in
 idna==3.3
     # via requests
-importlib-metadata==4.11.3
-    # via flask
 itsdangerous==2.1.2
     # via
     #   flask
@@ -35,15 +33,13 @@ markupsafe==2.1.1
     #   jinja2
     #   wtforms
 requests==2.27.1
-    # via basic-flask-proxy
+    # via sanitized-package
 urllib3==1.26.9
     # via requests
 werkzeug==2.1.1
     # via flask
 wtforms==3.0.1
     # via flask-wtf
-zipp==3.8.0
-    # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
