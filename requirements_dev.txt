@@ -24,12 +24,12 @@ click==8.1.2
 flask==2.1.1
     # via
     #   -r requirements.txt
-    #   basic-flask-proxy
     #   flask-wtf
+    #   sanitized-package
 flask-wtf==1.0.1
     # via
     #   -r requirements.txt
-    #   basic-flask-proxy
+    #   sanitized-package
 gunicorn==20.1.0
     # via -r requirements.txt
 idna==3.3
@@ -37,9 +37,7 @@ idna==3.3
     #   -r requirements.txt
     #   requests
 importlib-metadata==4.11.3
-    # via
-    #   -r requirements.txt
-    #   flask
+    # via -r requirements.txt
 iniconfig==1.1.1
     # via pytest
 itsdangerous==2.1.2
@@ -77,8 +75,8 @@ pytest-responses==0.5.0
 requests==2.27.1
     # via
     #   -r requirements.txt
-    #   basic-flask-proxy
     #   responses
+    #   sanitized-package
 responses==0.20.0
     # via pytest-responses
 tomli==2.0.1
@@ -94,7 +92,7 @@ werkzeug==2.1.1
     # via
     #   -r requirements.txt
     #   flask
-wheel==0.37.1
+wheel==0.38.1
     # via pip-tools
 wtforms==3.0.1
     # via
