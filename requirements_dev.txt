@@ -24,22 +24,18 @@ click==8.1.2
 flask==2.1.1
     # via
     #   -r requirements.txt
-    #   basic-flask-proxy
     #   flask-wtf
+    #   sanitized-package
 flask-wtf==1.0.1
     # via
     #   -r requirements.txt
-    #   basic-flask-proxy
+    #   sanitized-package
 gunicorn==20.1.0
     # via -r requirements.txt
 idna==3.3
     # via
     #   -r requirements.txt
     #   requests
-importlib-metadata==4.11.3
-    # via
-    #   -r requirements.txt
-    #   flask
 iniconfig==1.1.1
     # via pytest
 itsdangerous==2.1.2
@@ -55,6 +51,7 @@ markupsafe==2.1.1
     # via
     #   -r requirements.txt
     #   jinja2
+    #   werkzeug
     #   wtforms
 packaging==21.3
     # via pytest
@@ -77,8 +74,8 @@ pytest-responses==0.5.0
 requests==2.27.1
     # via
     #   -r requirements.txt
-    #   basic-flask-proxy
     #   responses
+    #   sanitized-package
 responses==0.20.0
     # via pytest-responses
 tomli==2.0.1
@@ -90,7 +87,7 @@ urllib3==1.26.9
     #   -r requirements.txt
     #   requests
     #   responses
-werkzeug==2.1.1
+werkzeug==2.2.3
     # via
     #   -r requirements.txt
     #   flask
@@ -100,10 +97,6 @@ wtforms==3.0.1
     # via
     #   -r requirements.txt
     #   flask-wtf
-zipp==3.8.0
-    # via
-    #   -r requirements.txt
-    #   importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
 # pip
